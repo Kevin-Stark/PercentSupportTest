@@ -45,12 +45,12 @@ import java.util.regex.Pattern;
 // * <p/>
 // * <ol>
 // * <li> You need a {@link ViewGroup.LayoutParams} subclass in your ViewGroup that implements
-// * {@link com.kevin.percentsupportextends.PercentLayoutHelper.PercentLayoutParams}.
+// * {@link com.zhy.android.percent.support.PercentLayoutHelper.PercentLayoutParams}.
 // * <li> In your {@code LayoutParams(Context c, AttributeSet attrs)} constructor create an instance
-// * of {@link PercentLayoutInfo} by calling
+// * of {@link PercentLayoutHelper.PercentLayoutInfo} by calling
 // * {@link PercentLayoutHelper#getPercentLayoutInfo(Context, AttributeSet)}. Return this
 // * object from {@code public PercentLayoutHelper.PercentLayoutInfo getPercentLayoutInfo()}
-// * method that you implemented for {@link com.kevin.percentsupportextends.PercentLayoutHelper.PercentLayoutParams} interface.
+// * method that you implemented for {@link com.zhy.android.percent.support.PercentLayoutHelper.PercentLayoutParams} interface.
 // * <li> Override
 // * {@link ViewGroup.LayoutParams#setBaseAttributes(TypedArray, int, int)}
 // * with a single line implementation {@code PercentLayoutHelper.fetchWidthAndHeight(this, a,
@@ -250,10 +250,10 @@ public class PercentLayoutHelper {
     }
 
 
-//    /**
-//     * Constructs a PercentLayoutInfo from attributes associated with a View. Call this method from
-//     * {@code LayoutParams(Context c, AttributeSet attrs)} constructor.
-//     */
+    /**
+     * Constructs a PercentLayoutInfo from attributes associated with a View. Call this method from
+     * {@code LayoutParams(Context c, AttributeSet attrs)} constructor.
+     */
     public static PercentLayoutInfo getPercentLayoutInfo(Context context,
                                                          AttributeSet attrs) {
         PercentLayoutInfo info = null;
@@ -320,7 +320,7 @@ public class PercentLayoutHelper {
                 R.styleable.PercentLayout_Layout_layout_maxWidthPercent,
                 true);
         if (percentVal != null) {
-            checkForInfoExists(info);
+            info = checkForInfoExists(info);
             info.maxWidthPercent = percentVal;
         }
         //maxHeight
@@ -328,7 +328,7 @@ public class PercentLayoutHelper {
                 R.styleable.PercentLayout_Layout_layout_maxHeightPercent,
                 false);
         if (percentVal != null) {
-            checkForInfoExists(info);
+            info = checkForInfoExists(info);
             info.maxHeightPercent = percentVal;
         }
         //minWidth
@@ -336,7 +336,7 @@ public class PercentLayoutHelper {
                 R.styleable.PercentLayout_Layout_layout_minWidthPercent,
                 true);
         if (percentVal != null) {
-            checkForInfoExists(info);
+            info = checkForInfoExists(info);
             info.minWidthPercent = percentVal;
         }
         //minHeight
@@ -344,7 +344,7 @@ public class PercentLayoutHelper {
                 R.styleable.PercentLayout_Layout_layout_minHeightPercent,
                 false);
         if (percentVal != null) {
-            checkForInfoExists(info);
+            info = checkForInfoExists(info);
             info.minHeightPercent = percentVal;
         }
 
@@ -575,20 +575,20 @@ public class PercentLayoutHelper {
         }
     }
 
-//    /**
-//     * Iterates over children and checks if any of them would like to get more space than it
-//     * received through the percentage dimension.
-//     * <p/>
-//     * If you are building a layout that supports percentage dimensions you are encouraged to take
-//     * advantage of this method. The developer should be able to specify that a child should be
-//     * remeasured by adding normal dimension attribute with {@code wrap_content} value. For example
-//     * he might specify child's attributes as {@code app:layout_widthPercent="60%p"} and
-//     * {@code android:layout_width="wrap_content"}. In this case if the child receives too little
-//     * space, it will be remeasured with width set to {@code WRAP_CONTENT}.
-//     *
-//     * @return True if the measure phase needs to be rerun because one of the children would like
-//     * to receive more space.
-//     */
+    /**
+     * Iterates over children and checks if any of them would like to get more space than it
+     * received through the percentage dimension.
+     * <p/>
+     * If you are building a layout that supports percentage dimensions you are encouraged to take
+     * advantage of this method. The developer should be able to specify that a child should be
+     * remeasured by adding normal dimension attribute with {@code wrap_content} value. For example
+     * he might specify child's attributes as {@code app:layout_widthPercent="60%p"} and
+     * {@code android:layout_width="wrap_content"}. In this case if the child receives too little
+     * space, it will be remeasured with width set to {@code WRAP_CONTENT}.
+     *
+     * @return True if the measure phase needs to be rerun because one of the children would like
+     * to receive more space.
+     */
     public boolean handleMeasuredStateTooSmall() {
         boolean needsSecondMeasure = false;
         for (int i = 0, N = mHost.getChildCount(); i < N; i++) {
@@ -723,9 +723,9 @@ public class PercentLayoutHelper {
             mPreservedParams = new ViewGroup.MarginLayoutParams(0, 0);
         }
 
-//        /**
-//         * Fills {@code ViewGroup.LayoutParams} dimensions based on percentage values.
-//         */
+        /**
+         * Fills {@code ViewGroup.LayoutParams} dimensions based on percentage values.
+         */
         public void fillLayoutParams(ViewGroup.LayoutParams params, int widthHint,
                                      int heightHint) {
             // Preserve the original layout params, so we can restore them after the measure step.
@@ -746,10 +746,10 @@ public class PercentLayoutHelper {
             }
         }
 
-//        /**
-//         * Fills {@code ViewGroup.MarginLayoutParams} dimensions and margins based on percentage
-//         * values.
-//         */
+        /**
+         * Fills {@code ViewGroup.MarginLayoutParams} dimensions and margins based on percentage
+         * values.
+         */
         public void fillMarginLayoutParams(ViewGroup.MarginLayoutParams params, int widthHint,
                                            int heightHint) {
             fillLayoutParams(params, widthHint, heightHint);
@@ -820,11 +820,11 @@ public class PercentLayoutHelper {
                     '}';
         }
 
-//        /**
-//         * Restores original dimensions and margins after they were changed for percentage based
-//         * values. Calling this method only makes sense if you previously called
-//         * {@link PercentLayoutInfo#fillMarginLayoutParams}.
-//         */
+        /**
+         * Restores original dimensions and margins after they were changed for percentage based
+         * values. Calling this method only makes sense if you previously called
+         * {@link PercentLayoutHelper.PercentLayoutInfo#fillMarginLayoutParams}.
+         */
         public void restoreMarginLayoutParams(ViewGroup.MarginLayoutParams params) {
             restoreLayoutParams(params);
             params.leftMargin = mPreservedParams.leftMargin;
@@ -837,24 +837,24 @@ public class PercentLayoutHelper {
                     MarginLayoutParamsCompat.getMarginEnd(mPreservedParams));
         }
 
-//        /**
-//         * Restores original dimensions after they were changed for percentage based values. Calling
-//         * this method only makes sense if you previously called
-//         * {@link PercentLayoutInfo#fillLayoutParams}.
-//         */
+        /**
+         * Restores original dimensions after they were changed for percentage based values. Calling
+         * this method only makes sense if you previously called
+         * {@link PercentLayoutHelper.PercentLayoutInfo#fillLayoutParams}.
+         */
         public void restoreLayoutParams(ViewGroup.LayoutParams params) {
             params.width = mPreservedParams.width;
             params.height = mPreservedParams.height;
         }
     }
 
-//    /**
-//     * If a layout wants to support percentage based dimensions and use this helper class, its
-//     * {@code LayoutParams} subclass must implement this interface.
-//     * <p/>
-//     * Your {@code LayoutParams} subclass should contain an instance of {@code PercentLayoutInfo}
-//     * and the implementation of this interface should be a simple accessor.
-//     */
+    /**
+     * If a layout wants to support percentage based dimensions and use this helper class, its
+     * {@code LayoutParams} subclass must implement this interface.
+     * <p/>
+     * Your {@code LayoutParams} subclass should contain an instance of {@code PercentLayoutInfo}
+     * and the implementation of this interface should be a simple accessor.
+     */
     public interface PercentLayoutParams {
         PercentLayoutInfo getPercentLayoutInfo();
     }
